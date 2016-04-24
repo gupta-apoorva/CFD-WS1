@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include "helper.h"
+//this is a test 
 //this is a test
 /* ----------------------------------------------------------------------- */
 /*                             auxiliary functions                         */
