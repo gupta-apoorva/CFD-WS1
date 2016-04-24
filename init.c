@@ -54,5 +54,27 @@ int read_parameters( const char *szFileName,       /* name of the file */
    return 1;
 }
 
+void init_uvp(
+  double UI,
+  double VI,
+  double PI,
+  int imax,
+  int jmax,
+  double **U,
+  double **V,
+  double **P
+){
+  for (int i = 0; i < imax; ++i)
+  {
+    for (int j = 0; j < jmax; ++j)
+    {
+      U[i][j] = UI;
+      V[i][j] = VI;
+      P[i][j] = PI;
+    }
+  }
+
+}
+
 
 

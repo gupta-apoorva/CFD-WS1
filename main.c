@@ -38,5 +38,64 @@
  * - calculate_uv() Calculate the velocity at the next time step.
  */
 int main(int argn, char** args){
-  return -1;
+   double** U;
+   double** V;
+   double** P;
+   double Re;               /* reynolds number   */
+   double UI;                /* velocity x-direction */
+   double VI;               /* velocity y-direction */
+   double PI;               /* pressure */
+   double GX;                /* gravitation x-direction */
+   double GY;                /* gravitation y-direction */
+   double t_end;             /* end time */
+   double xlength;           /* length of the domain x-dir.*/
+   double ylength;           /* length of the domain y-dir.*/
+   double dt;                /* time step */
+   double dx;               /* length of a cell x-dir. */
+   double dy;                /* length of a cell y-dir. */
+   int  imax;                /* number of cells x-direction*/
+   int  jmax;                /* number of cells y-direction*/
+   double alpha;             /* uppwind differencing factor*/
+   double omg;               /* relaxation factor */
+   double tau;               /* safety factor for time step*/
+   int  itermax;             /* max. number of iterations  */
+   double eps;               /* accuracy bound for pressure*/
+   double dt_value;
+
+//setting the parameters
+read_parameters( "cavity100.dat",       
+                    &Re,                
+                    &UI,               
+                    &VI,                
+                    &PI,                
+                    &GX,                
+                    &GY,                
+                    &t_end,             
+                    &xlength,           
+                    &ylength,           
+                    &dt,                
+                    &dx,                
+                    &dy,                
+                    &imax,                
+                    &jmax,                
+                    &alpha,             
+                    &omg,               
+                    &tau,               
+                    &itermax,             
+		            &eps,               
+		    		&dt_value);
+
+
+// Creating the arrays
+
+U = matrix ( 0 , imax+1 , 0 , jmax+1 );
+V = matrix ( 0 , imax+1 , 0 , jmax+1 );
+P = matrix ( 0 , imax+1 , 0 , jmax+1 );
+
+
+// initializing the arrays
+
+init_uvp(UI,VI,PI,imax,jmax,U,V,P);
+
+  return 0;
 }
