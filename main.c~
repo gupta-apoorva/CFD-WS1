@@ -82,8 +82,8 @@ read_parameters( "cavity100.dat",
                     &omg,               
                     &tau,               
                     &itermax,             
-		    &eps,               
-		    &dt_value);
+		            &eps,               
+		    		&dt_value);
 
 
 // Creating the arrays
