@@ -95,7 +95,7 @@ read_parameters( "cavity100.dat",
 U = matrix ( 0 , imax+1 , 0 , jmax+1 );
 V = matrix ( 0 , imax+1 , 0 , jmax+1 );
 P = matrix ( 0 , imax+1 , 0 , jmax+1 );
-
+RS = matrix( 1,imax,1,jmax);
 
 // initializing the arrays
 
