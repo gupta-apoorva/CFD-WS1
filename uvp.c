@@ -84,6 +84,11 @@ for (int i=1;i<=imax;i++)
   }
 }
 
+/* calculating F and G*/
+
+dv2dy = (1/dy)*(((V[i][j] + V[i][j+1])/2)^2 - ((V[i][j-1] + V[i][j])/2)^2) + (alpha/dy)*(abs(V[i][j] + V[i][j+1])/2*(V[i][j] - V[i][j+1])/2 - abs(V[i][j-1] + V[i][j])/2*(V[i][j-1] - V[i][j])/2);
+
+duvdx = (1/dx)*((U[i][j] + U[i][j+1])/2*(V[i][j] + V[i+1][j])/2 - (U[i-1][j] + U[i-1][j+1])/2*(V[i-1][j] + V[i][j])/2) + alpha/dx*(abs(U[i][j] + U[i][j+1])/2*(V[i][j] - V[i+1][j])/2 - abs(U[i-1][j] + U[i-1][j+1])/2*(V[i-1][j] - V[i][j])/2);
 
 
 
