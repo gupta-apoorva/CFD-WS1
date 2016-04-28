@@ -9,24 +9,19 @@ void boundaryvalues(
 	{
 		U[i][0] = -U[i][1];
 		U[i][jmax+1] = U[i][jmax];
+                V[i][0] = -V[i][1];
+		V[i][jmax+1] = -V[i][jmax];
+                P[i][0] = P[i][1];
+		P[i][jmax+1] = P[i][jmax];
+                
 	}
 	for(int j=1; j<=jmax; j++)
 	{
 		U[0][j] = -U[1][j];
 		U[imax+1][j] = -U[imax][j];
-	}
-	for(int i=1; i<=imax; i++)
-	{
-		V[i][0] = -V[i][1];
-		V[i][jmax+i] = -V[i][jmax];
-	}
-	for(int j=1; j<=jmax; j++)
-	{
-		V[0][j] = -V[1][j];
+                V[0][j] = -V[1][j];
 		V[imax+1][j] = -V[imax][j];
-	}
-
-
-
-
+                P[0][j] = P[1][j];
+		P[imax+1][j] = P[imax][j];
+	
 }
