@@ -59,6 +59,10 @@ void init_uvp(double UI,double VI,double PI,int imax,int jmax,double **U,double 
 	init_matrix(U,1,imax,1,jmax,UI);
 	init_matrix(V,1,imax,1,jmax,VI);
 	init_matrix(P,1,imax,1,jmax,PI);
+        init_matrix(RS,0,imax+1,0,jmax+1,0);
+        init_matrix(F,0,imax+1,0,jmax+1,0);
+        init_matrix(G,0,imax+1,0,jmax+1,0);
+        
 }
 
 
