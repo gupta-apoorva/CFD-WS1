@@ -41,7 +41,8 @@
 
 
 
-int main(int argn, char** args){
+int main(int argn, char** args)
+{
    double** U;
    double** V;
    double** P;
@@ -59,49 +60,70 @@ int main(int argn, char** args){
    double dy;                /* length of a cell y-dir. */
    int  imax;                /* number of cells x-direction*/
    int  jmax;                /* number of cells y-direction*/
-   double alpha;             /* uppwind differencing factor*/
+   double alpha;             /* upwind differencing factor*/
    double omg;               /* relaxation factor */
    double tau;               /* safety factor for time step*/
    int  itermax;             /* max. number of iterations  */
    double eps;               /* accuracy bound for pressure*/
-   double dt_value;
+   double dt_value;          /* time for output */
+   double** RS;
+   double** F;
+   double** G;
 
 //setting the parameters
-read_parameters( "cavity100.dat",       
-                    &Re,                
-                    &UI,               
-                    &VI,                
-                    &PI,                
-                    &GX,                
-                    &GY,                
-                    &t_end,             
-                    &xlength,           
-                    &ylength,           
-                    &dt,                
-                    &dx,                
-                    &dy,                
-                    &imax,                
-                    &jmax,                
-                    &alpha,             
-                    &omg,               
-                    &tau,               
-                    &itermax,             
-		    &eps,               
-		    &dt_value);
+read_parameters( "cavity100.dat", &Re , &UI , &VI, &PI, &GX, &GY, &t_end, &xlength, &ylength, &dt, &dx, &dy, &imax, &jmax, &alpha, &omg, &tau,&itermax, &eps, &dt_value);
 
 
-// Creating the arrays
+// Creating the arrays U,V and P
 
 U = matrix ( 0 , imax+1 , 0 , jmax+1 );
 V = matrix ( 0 , imax+1 , 0 , jmax+1 );
 P = matrix ( 0 , imax+1 , 0 , jmax+1 );
+
+// Creating arrays for right side of pressure poissons equation (RS) and F and G
+
 RS = matrix ( 0,imax+1,0,jmax+1);
 F = matrix (0,imax+1,0,jmax+1);
 G = matrix (0,imax+1,0,jmax+1);
 
-// initializing the arrays
+// Initializing the arrays U,V,P,RS,F and G
 
-init_uvp(UI,VI,PI,imax,jmax,U,V,P);
-calculate_dt(Re,tau,dt,dx,dy,imax,jmax,U,V);
+init_uvp(UI,VI,PI,imax,jmax,&U,&V,&P);
+init_matrix(RS,0,imax+1,0,jmax+1,0);
+init_matrix(F,0,imax+1,0,jmax+1,0);
+init_matrix(G,0,imax+1,0,jmax+1,0);
+
+double t=0;   // initialize the time
+int n = 0;    // number of time steps
+ 
+while (t<t_end)
+  {
+      calculate_dt(Re,tau,&dt,dx,dy,imax,jmax,&U,&V);
+      boundaryvalues(imax, jmax, &U, &V, &P, &G, &F);
+      calculate_fg(Re,GX, GY, alpha, dt, dx, dy, imax, jmax, &U, &V, &F, &G);
+      calculate_rs(dt,dx,dy, imax,jmax, &F, &G, &RS);
+      int it = 0;
+      double* res = 1000;
+
+      while(it<itermax && res> eps) 
+          {
+            sor(omg, dx,dy,imax,jmax, &P, &RS, &res);
+            it++; 
+          }
+
+      calculate_uv(dt,dx, dy,imax,jmax,&U,&V,&F,&G,&P);
+      t = t+dt;
+      n = n+1;
+  }
+
+write vtkFile(szProblem, n, xlength, ylength, imax, jmax,dx, dy, U, V, P);
+
+free_matrix(&U,0,imax+1,0,jmax+1);
+free_matrix(&V,0,imax+1,0,jmax+1);
+free_matrix(&P,0,imax+1,0,jmax+1);
+free_matrix(&RS,0,imax+1,0,jmax+1);
+free_matrix(&F,0,imax+1,0,jmax+1);
+free_matrix(&G,0,imax+1,0,jmax+1);
+
   return 0;
 }
