@@ -6,6 +6,7 @@ OBJ = 	helper.o\
       	init.o\
       	boundary_val.o\
       	uvp.o\
+	sor.o\
       	main.o\
       	visual.o
 
@@ -24,5 +25,6 @@ init.o        : helper.h init.h
 boundary_val.o: helper.h boundary_val.h 
 uvp.o         : helper.h uvp.h
 visual.o      : helper.h
+sor.o		:sor.h
 
 main.o        : helper.h init.h boundary_val.h uvp.h visual.h

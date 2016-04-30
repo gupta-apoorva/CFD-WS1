@@ -1,6 +1,9 @@
 #include "helper.h"
 #include "visual.h"
 #include "init.h"
+#include "boundary_val.h"
+#include "uvp.h"
+#include "sor.h"
 #include <stdio.h>
 
 
@@ -88,7 +91,7 @@ G = matrix (0,imax+1,0,jmax+1);
 
 // Initializing the arrays U,V,P,RS,F and G
 
-init_uvp(UI,VI,PI,imax,jmax,&U,&V,&P);
+init_uvp(UI,VI,PI,imax,jmax,U,V,P);
 init_matrix(RS,0,imax+1,0,jmax+1,0);
 init_matrix(F,0,imax+1,0,jmax+1,0);
 init_matrix(G,0,imax+1,0,jmax+1,0);
@@ -98,32 +101,32 @@ int n = 0;    // number of time steps
  
 while (t<t_end)
   {
-      calculate_dt(Re,tau,&dt,dx,dy,imax,jmax,&U,&V);
-      boundaryvalues(imax, jmax, &U, &V, &P, &G, &F);
-      calculate_fg(Re,GX, GY, alpha, dt, dx, dy, imax, jmax, &U, &V, &F, &G);
-      calculate_rs(dt,dx,dy, imax,jmax, &F, &G, &RS);
+      calculate_dt(Re,tau,&dt,dx,dy,imax,jmax,U,V);
+      boundaryvalues(imax, jmax, U, V,P, G, F);
+      calculate_fg(Re,GX, GY, alpha, dt, dx, dy, imax, jmax, U, V, F, G);
+      calculate_rs(dt,dx,dy, imax,jmax, F, G, RS);
       int it = 0;
-      double* res = 1000;
+      double res = 1000;
 
-      while(it<itermax && res> eps) 
+      while(it<itermax && res > eps) 
           {
-            sor(omg, dx,dy,imax,jmax, &P, &RS, &res);
+            sor(omg, dx,dy,imax,jmax, P, RS, &res);
             it++; 
           }
 
-      calculate_uv(dt,dx, dy,imax,jmax,&U,&V,&F,&G,&P);
+      calculate_uv(dt,dx, dy,imax,jmax,U,V,F,G,P);
       t = t+dt;
       n = n+1;
   }
 
-write vtkFile(szProblem, n, xlength, ylength, imax, jmax,dx, dy, U, V, P);
+write_vtkFile("szProblem.vtk", n, xlength, ylength, imax, jmax,dx, dy, U, V, P);
 
-free_matrix(&U,0,imax+1,0,jmax+1);
-free_matrix(&V,0,imax+1,0,jmax+1);
-free_matrix(&P,0,imax+1,0,jmax+1);
-free_matrix(&RS,0,imax+1,0,jmax+1);
-free_matrix(&F,0,imax+1,0,jmax+1);
-free_matrix(&G,0,imax+1,0,jmax+1);
+free_matrix(U,0,imax+1,0,jmax+1);
+free_matrix(V,0,imax+1,0,jmax+1);
+free_matrix(P,0,imax+1,0,jmax+1);
+free_matrix(RS,0,imax+1,0,jmax+1);
+free_matrix(F,0,imax+1,0,jmax+1);
+free_matrix(G,0,imax+1,0,jmax+1);
 
   return 0;
 }
