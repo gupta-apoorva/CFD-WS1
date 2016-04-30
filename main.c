@@ -46,29 +46,30 @@
 
 int main(int argn, char** args)
 {
+
    double** U;
    double** V;
    double** P;
-   double Re;               /* reynolds number   */
-   double UI;                /* velocity x-direction */
-   double VI;               /* velocity y-direction */
-   double PI;               /* pressure */
-   double GX;                /* gravitation x-direction */
-   double GY;                /* gravitation y-direction */
-   double t_end;             /* end time */
-   double xlength;           /* length of the domain x-dir.*/
-   double ylength;           /* length of the domain y-dir.*/
-   double dt;                /* time step */
-   double dx;               /* length of a cell x-dir. */
-   double dy;                /* length of a cell y-dir. */
-   int  imax;                /* number of cells x-direction*/
-   int  jmax;                /* number of cells y-direction*/
-   double alpha;             /* upwind differencing factor*/
-   double omg;               /* relaxation factor */
-   double tau;               /* safety factor for time step*/
-   int  itermax;             /* max. number of iterations  */
-   double eps;               /* accuracy bound for pressure*/
-   double dt_value;          /* time for output */
+   double Re;               
+   double UI;                
+   double VI;               
+   double PI;           
+   double GX;                
+   double GY;                
+   double t_end;            
+   double xlength;          
+   double ylength;           
+   double dt;                
+   double dx;             
+   double dy;               
+   int  imax;                
+   int  jmax;               
+   double alpha;            
+   double omg;               
+   double tau;              
+   int  itermax;             
+   double eps;              
+   double dt_value;          
    double** RS;
    double** F;
    double** G;
@@ -78,27 +79,62 @@ read_parameters( "cavity100.dat", &Re , &UI , &VI, &PI, &GX, &GY, &t_end, &xleng
 
 
 // Creating the arrays U,V and P
-
-U = matrix ( 0 , imax+1 , 0 , jmax+1 );
-V = matrix ( 0 , imax+1 , 0 , jmax+1 );
-P = matrix ( 0 , imax+1 , 0 , jmax+1 );
-
+	U = matrix ( 0 , imax+1 , 0 , jmax+1 );
+        V = matrix ( 0 , imax+1 , 0 , jmax+1 );
+        P = matrix ( 0 , imax+1 , 0 , jmax+1 );
+	//init_uvp( UI, VI,PI,imax, jmax,U,V,P);
+        
+/*	
+	for ( i = 0;i<imax+1;i++)
+	{
+	   for ( j = 0;j<jmax+1;++j)
+	   {
+	     printf("i = %d j = %d value  = %lf  \n" , i, j, U[i][j]); 
+	   }
+		printf(" \n");
+	}
+*/
 // Creating arrays for right side of pressure poissons equation (RS) and F and G
 
-RS = matrix ( 0,imax+1,0,jmax+1);
-F = matrix (0,imax+1,0,jmax+1);
-G = matrix (0,imax+1,0,jmax+1);
+        RS = matrix ( 0,imax+1,0,jmax+1);
+        F = matrix (0,imax+1,0,jmax+1);
+        G = matrix (0,imax+1,0,jmax+1);
 
 // Initializing the arrays U,V,P,RS,F and G
+        init_uvp( UI, VI,PI,imax, jmax,U,V,P);
+        init_matrix(RS,0,imax+1,0,jmax+1,5);
+        init_matrix(F,0,imax+1,0,jmax+1,0);
+        init_matrix(G,0,imax+1,0,jmax+1,0);
 
-init_uvp(UI,VI,PI,imax,jmax,U,V,P);
-init_matrix(RS,0,imax+1,0,jmax+1,0);
-init_matrix(F,0,imax+1,0,jmax+1,0);
-init_matrix(G,0,imax+1,0,jmax+1,0);
+//boundaryvalues(imax, jmax, U, V,P, G, F);
 
-double t=0;   // initialize the time
-int n = 0;    // number of time steps
- 
+/*
+int i, j;
+for ( i = 0;i<imax+1;i++)
+	{
+	   for ( j = 0;j<jmax+1;++j)
+	   {
+	     printf("i = %d j = %d value  = %lf  \n" , i, j, RS[i][j]); 
+	   }
+		printf(" \n");
+	}
+
+*/
+       // boundaryvalues(imax, jmax, U, V,P, G, F);
+
+        double t=0;   // initialize the time
+        int n = 0;    // number of time steps
+
+int i, j;
+for ( i = 0;i<imax+1;i++)
+	{
+	   for ( j = 0;j<jmax+1;++j)
+	   {
+	     printf("i = %d j = %d value  = %lf  \n" , i, j, F[i][j]); 
+	   }
+		printf(" \n");
+	}
+
 while (t<t_end)
   {
       calculate_dt(Re,tau,&dt,dx,dy,imax,jmax,U,V);
@@ -127,6 +163,7 @@ free_matrix(P,0,imax+1,0,jmax+1);
 free_matrix(RS,0,imax+1,0,jmax+1);
 free_matrix(F,0,imax+1,0,jmax+1);
 free_matrix(G,0,imax+1,0,jmax+1);
+
 
   return 0;
 }

@@ -23,20 +23,29 @@ if (tau>0)
     double vmax = 0;
     for (int i=1;i<=imax;i++) 
     {
-      for (int j=1;i<=jmax;j++)
+      for (int j=1;j<=jmax;j++)
       {
          if (abs(U[i][j]) > umax)
             {
                umax = abs(U[i][j]);
             }
-         if (abs(V[i][j]) > vmax)
-            {
-               vmax = abs(V[i][j]);
-            }
+        
        }
     }
+    for (int i=1;i<=imax;i++) 
+    {
+      for (int j=1;j<=jmax;j++)
+      {
+          if (abs(V[i][j]) > vmax)
+            {
+               vmax = abs(V[i][j]);
+            }      
+       }
+    }
+    
     *dt = tau*fmin(fmin(dx/umax,dy/vmax),Re/(2*(1/(dx*dx)+1/(dy*dy))));
    }
+printf("%f",*dt);
 }
 
 
@@ -44,9 +53,9 @@ if (tau>0)
 
 void calculate_rs(double dt,double dx,double dy,  int imax,  int jmax,  double **F,  double **G,  double **RS)
 {
-for (int i=0;i<imax;i++)
+for (int i=1;i<imax;i++)
    {
-     for (int j=0;j<jmax;j++)
+     for (int j=1;j<jmax;j++)
       {
          RS[i][j] = 1/dt*((F[i][j] - F[i-1][j])/dx + (G[i][j] - G[i][j-1])/dy);
       }
