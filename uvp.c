@@ -96,7 +96,7 @@ void calculate_fg(double Re,double GX,double GY,double alpha,double dt,double dx
   {
     for (int j = 1; j <= jmax; ++j)
     {
-      duvdy = 1/(4*dy)*(((V[i][j]+V[i+1][j])*(U[i][j]-U[i][j+1]))-(V[i][j-1]+V[i+1][j-1])*(U[i][j-1]+U[i][j])+alpha*((abs(V[i][j]+V[i+1][j])*(U[i][j]-U[i][j+1]))-abs(V[i][j-1]+V[i+1][j-1])*(U[i][j-1]-U[i][j])));
+      duvdy = 1/(4*dy)*(((V[i][j]+V[i+1][j])*(U[i][j]+U[i][j+1]))-(V[i][j-1]+V[i+1][j-1])*(U[i][j-1]+U[i][j])+alpha*((abs(V[i][j]+V[i+1][j])*(U[i][j]-U[i][j+1]))-abs(V[i][j-1]+V[i+1][j-1])*(U[i][j-1]-U[i][j])));
       du2dx = 1/(4*dx)*(((pow((U[i][j]+U[i+1][j]),2))-(pow((U[i-1][j]+U[i][j]),2)))+alpha*((abs(U[i][j]+U[i+1][j]))*(U[i][j]-U[i+1][j])-(abs(U[i-1][j]+U[i][j]))*(U[i-1][j]-U[i][j])));
       d2udx2 = (U[i+1][j]-2*U[i][j]+U[i-1][j])/(dx*dx);
       d2udy2 = (U[i][j+1]-2*U[i][j]+U[i][j-1])/(dy*dy);
@@ -104,7 +104,7 @@ void calculate_fg(double Re,double GX,double GY,double alpha,double dt,double dx
       
       
       
-      F[i][j] = U[i][j] + dt*(1/Re*(d2udx2 + d2udy2 - du2dx - duvdy + GX));
+      F[i][j] = U[i][j] + dt*(1/Re*(d2udx2 + d2udy2) - du2dx - duvdy + GX);
     }
   }
   for (int i =1;i<=imax;i++)
@@ -114,9 +114,8 @@ void calculate_fg(double Re,double GX,double GY,double alpha,double dt,double dx
       d2vdx2 = (V[i+1][j]-2*V[i][j]+V[i-1][j])/(dx*dx);
       d2vdy2 = (V[i][j+1]-2*V[i][j]+V[i][j-1])/(dy*dy);
       duvdx = 1/(4*dx)*(((U[i][j]+U[i][j+1])*(V[i][j]-V[i+1][j]))-(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]+V[i][j])+alpha*((abs(U[i][j]+U[i][j+1])*(V[i][j]-V[i+1][j]))-abs(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]-V[i][j])));
-      //duvdx = (1/dx)*((U[i][j] + U[i][j+1])/2*(V[i][j] + V[i+1][j])/2 - (U[i-1][j] + U[i-1][j+1])/2*(V[i-1][j] + V[i][j])/2) + alpha/dx*(abs(U[i][j] + U[i][j+1])/2*(V[i][j] - V[i+1][j])/2 - abs(U[i-1][j] + U[i-1][j+1])/2*(V[i-1][j] - V[i][j])/2);
-      dv2dy = (1/dy)*(pow(((V[i][j] + V[i][j+1])/2),2) - pow(((V[i][j-1] + V[i][j])/2),2) + (alpha/dy)*(abs(V[i][j] + V[i][j+1])/2*(V[i][j] - V[i][j+1])/2 - abs(V[i][j-1] + V[i][j])/2*(V[i][j-1] - V[i][j])/2));
-      G[i][j] = V[i][j] + dt*(1/Re*(d2vdx2 + d2vdy2 - duvdx - dv2dy + GY));
+      dv2dy = 1/(4*dy)*(pow(((V[i][j] + V[i][j+1])),2) - pow(((V[i][j-1] + V[i][j])),2) + alpha*(abs(V[i][j] + V[i][j+1])*(V[i][j] - V[i][j+1]) - abs(V[i][j-1] + V[i][j])*(V[i][j-1] - V[i][j])));
+      G[i][j] = V[i][j] + dt*(1/Re*(d2vdx2 + d2vdy2) - duvdx - dv2dy + GY);
     }
    }
   }
