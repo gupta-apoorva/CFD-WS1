@@ -53,9 +53,9 @@ printf("%f",*dt);
 
 void calculate_rs(double dt,double dx,double dy,  int imax,  int jmax,  double **F,  double **G,  double **RS)
 {
-for (int i=1;i<imax;i++)
+for (int i=1;i<=imax;i++)
    {
-     for (int j=1;j<jmax;j++)
+     for (int j=1;j<=jmax;j++)
       {
          RS[i][j] = 1/dt*((F[i][j] - F[i-1][j])/dx + (G[i][j] - G[i][j-1])/dy);
       }
@@ -113,7 +113,7 @@ void calculate_fg(double Re,double GX,double GY,double alpha,double dt,double dx
     {
       d2vdx2 = (V[i+1][j]-2*V[i][j]+V[i-1][j])/(dx*dx);
       d2vdy2 = (V[i][j+1]-2*V[i][j]+V[i][j-1])/(dy*dy);
-      duvdx = 1/(4*dx)*(((U[i][j]+U[i][j+1])*(V[i][j]-V[i+1][j]))-(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]+V[i][j])+alpha*((abs(U[i][j]+U[i][j+1])*(V[i][j]-V[i+1][j]))-abs(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]-V[i][j])));
+      duvdx = 1/(4*dx)*(((U[i][j]+U[i][j+1])*(V[i][j]+V[i+1][j]))-(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]+V[i][j])+alpha*((abs(U[i][j]+U[i][j+1])*(V[i][j]-V[i+1][j]))-abs(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]-V[i][j])));
       dv2dy = 1/(4*dy)*(pow(((V[i][j] + V[i][j+1])),2) - pow(((V[i][j-1] + V[i][j])),2) + alpha*(abs(V[i][j] + V[i][j+1])*(V[i][j] - V[i][j+1]) - abs(V[i][j-1] + V[i][j])*(V[i][j-1] - V[i][j])));
       G[i][j] = V[i][j] + dt*(1/Re*(d2vdx2 + d2vdy2) - duvdx - dv2dy + GY);
     }
