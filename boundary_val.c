@@ -12,8 +12,8 @@ void boundaryvalues(int imax,int jmax,double **U,double **V, double** P, double*
 		P[i][jmax+1] = P[i][jmax];
         G[i][0] = V[i][0];
         G[i][jmax] = V[i][jmax]; 
-                
-	}
+    }
+    
 	for(int j=1; j<=jmax; j++)
 	{
 		U[0][j] = -U[1][j];
@@ -24,6 +24,5 @@ void boundaryvalues(int imax,int jmax,double **U,double **V, double** P, double*
 		P[imax+1][j] = P[imax][j];
         F[0][j] = U[0][j];
         F[imax][j] = U[imax][j];
-	
-}
+	}
 }

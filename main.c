@@ -80,24 +80,24 @@ read_parameters( "cavity100.dat", &Re , &UI , &VI, &PI, &GX, &GY, &t_end, &xleng
 
 // Creating the arrays U,V and P
 	U = matrix ( 0 , imax+1 , 0 , jmax+1 );
-        V = matrix ( 0 , imax+1 , 0 , jmax+1 );
-        P = matrix ( 0 , imax+1 , 0 , jmax+1 );
+  V = matrix ( 0 , imax+1 , 0 , jmax+1 );
+  P = matrix ( 0 , imax+1 , 0 , jmax+1 );
         
 
 // Creating arrays for right side of pressure poissons equation (RS) and F and G
 	RS = matrix ( 0,imax+1,0,jmax+1);
-        F = matrix (0,imax+1,0,jmax+1);
-        G = matrix (0,imax+1,0,jmax+1);
+  F = matrix (0,imax+1,0,jmax+1);
+  G = matrix (0,imax+1,0,jmax+1);
 
 // Initializing the arrays U,V,P,RS,F and G
-        init_uvp( UI, VI,PI,imax, jmax,U,V,P);
-        init_matrix(RS,0,imax+1,0,jmax+1,5);
-        init_matrix(F,0,imax+1,0,jmax+1,0);
-        init_matrix(G,0,imax+1,0,jmax+1,0);
+  init_uvp( UI, VI,PI,imax, jmax,U,V,P);
+  init_matrix(RS,0,imax+1,0,jmax+1,5);
+  init_matrix(F,0,imax+1,0,jmax+1,0);
+  init_matrix(G,0,imax+1,0,jmax+1,0);
 
 
-        double t=0;   // initialize the time
-        int n = 0;    // number of time steps
+  double t=0;   // initialize the time
+  int n = 0;    // number of time steps
 
 while (t<t_end)
   {
