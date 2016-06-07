@@ -101,9 +101,6 @@ void calculate_fg(double Re,double GX,double GY,double alpha,double dt,double dx
       d2udx2 = (U[i+1][j]-2*U[i][j]+U[i-1][j])/(dx*dx);
       d2udy2 = (U[i][j+1]-2*U[i][j]+U[i][j-1])/(dy*dy);
       
-      
-      
-      
       F[i][j] = U[i][j] + dt*(1/Re*(d2udx2 + d2udy2) - du2dx - duvdy + GX);
     }
   }
@@ -115,6 +112,7 @@ void calculate_fg(double Re,double GX,double GY,double alpha,double dt,double dx
       d2vdy2 = (V[i][j+1]-2*V[i][j]+V[i][j-1])/(dy*dy);
       duvdx = 1/(4*dx)*(((U[i][j]+U[i][j+1])*(V[i][j]+V[i+1][j]))-(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]+V[i][j])+alpha*((abs(U[i][j]+U[i][j+1])*(V[i][j]-V[i+1][j]))-abs(U[i-1][j]+U[i-1][j+1])*(V[i-1][j]-V[i][j])));
       dv2dy = 1/(4*dy)*(pow(((V[i][j] + V[i][j+1])),2) - pow(((V[i][j-1] + V[i][j])),2) + alpha*(abs(V[i][j] + V[i][j+1])*(V[i][j] - V[i][j+1]) - abs(V[i][j-1] + V[i][j])*(V[i][j-1] - V[i][j])));
+
       G[i][j] = V[i][j] + dt*(1/Re*(d2vdx2 + d2vdy2) - duvdx - dv2dy + GY);
     }
    }
