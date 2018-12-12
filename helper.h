@@ -339,7 +339,7 @@ int **read_pgm(const char *filename);
  *  DUMP_TIMER()      dump time that has passed since the last
  *                    RESET_TIMER()
  */
-#define DUMP_MESSAGE(s) fprintf( DUMPOUT, "%s:%d %s\n",            __FILE__, __LINE__, s  )
+#define DUMP_MESSAGE(s) fprintf( DUMPOUT, "%s:%d %s\n", __FILE__, __LINE__, s  )
 
 /**
  *                         useful macros
